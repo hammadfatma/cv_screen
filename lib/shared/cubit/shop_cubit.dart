@@ -21,4 +21,34 @@ class ShopCubit extends Cubit<ShopStates> {
       emit(ProductsFailureState());
     });
   }
+
+  List<ProductModel> productsByCategory = [];
+  Future<void> fetchProductsByCategory(String categoryName) async {
+    emit(ProductsByCategoryLoadingState());
+    await dioHelper.getProductsByCategory(categoryName).then((value) {
+      var data =
+          value.map((element) => ProductModel.fromJson(element)).toList();
+      productsByCategory = data;
+      emit(ProductsByCategorySuccessState());
+    }).catchError((error) {
+      emit(ProductsByCategoryFailureState());
+    });
+  }
+
+  int currentIndex = 0;
+  List<String> categories = [
+    "all",
+    "electronics",
+    "jewelery",
+    "men's clothing",
+    "women's clothing",
+  ];
+  void changeCategories(int index, String categoryName) {
+    currentIndex = index;
+    if (index == 0) {
+      fetchProducts();
+    } else {
+      fetchProductsByCategory(categoryName);
+    }
+  }
 }

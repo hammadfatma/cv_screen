@@ -8,4 +8,9 @@ class DioHelper {
     var response = await _dio.get('$_baseUrl/products');
     return response.data;
   }
+
+  Future<List<dynamic>> getProductsByCategory(String categoryName) async {
+    var response = await _dio.get('$_baseUrl/products/category/$categoryName');
+    return response.data;
+  }
 }

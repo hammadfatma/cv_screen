@@ -10,3 +10,9 @@ class ProductsLoadingState extends ShopStates {}
 class ProductsSuccessState extends ShopStates {}
 
 class ProductsFailureState extends ShopStates {}
+
+class ProductsByCategoryLoadingState extends ShopStates {}
+
+class ProductsByCategorySuccessState extends ShopStates {}
+
+class ProductsByCategoryFailureState extends ShopStates {}

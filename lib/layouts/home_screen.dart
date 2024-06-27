@@ -1,3 +1,4 @@
+import 'package:cvscreen/modules/categories/category_screen.dart';
 import 'package:cvscreen/modules/products/products_screen.dart';
 import 'package:cvscreen/shared/cubit/shop_cubit.dart';
 import 'package:flutter/material.dart';
@@ -23,23 +24,22 @@ class HomeScreen extends StatelessWidget {
           ),
           body: Column(
             children: [
+              Image.network(
+                'https://static.vecteezy.com/system/resources/thumbnails/002/006/967/small/young-women-takes-a-shopping-cart-and-enjoy-online-shopping-through-smartphones-choose-to-buy-gifts-valentine-s-day-concepts-website-or-mobile-phone-application-flat-design-illustration-vector.jpg',
+                fit: BoxFit.fill,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              CategoriesScreen(categoriesName: cubit.categories),
+              const SizedBox(
+                height: 20,
+              ),
               Expanded(
-                child: Image.network(
-                  'https://static.vecteezy.com/system/resources/thumbnails/002/006/967/small/young-women-takes-a-shopping-cart-and-enjoy-online-shopping-through-smartphones-choose-to-buy-gifts-valentine-s-day-concepts-website-or-mobile-phone-application-flat-design-illustration-vector.jpg',
-                  fit: BoxFit.fill,
-                ),
+                child: cubit.currentIndex == 0
+                    ? ProductsScreen(products: cubit.products)
+                    : ProductsScreen(products: cubit.productsByCategory),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                height: 100,
-                color: Colors.amber,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Expanded(child: ProductsScreen(products: cubit.products)),
             ],
           ),
         );
