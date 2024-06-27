@@ -1,5 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:cvscreen/models/product_model.dart';
+import 'package:cvscreen/modules/products/product_details.dart';
 import 'package:flutter/material.dart';
 
 class ProductsScreen extends StatelessWidget {
@@ -23,7 +24,7 @@ class ProductsScreen extends StatelessWidget {
               childAspectRatio: 1 / 1.58,
               children: List.generate(
                 products.length,
-                (index) => buildGridProduct(products[index]),
+                (index) => buildGridProduct(context, products[index]),
               ),
             ),
           ),
@@ -35,9 +36,18 @@ class ProductsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildGridProduct(ProductModel model) {
+  Widget buildGridProduct(context, ProductModel model) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetails(
+              productModel: model,
+            ),
+          ),
+        );
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
