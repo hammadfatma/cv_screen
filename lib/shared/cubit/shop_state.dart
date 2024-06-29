@@ -5,6 +5,8 @@ abstract class ShopStates {}
 
 class ShopInitialState extends ShopStates {}
 
+class ShopChangeCategoriesState extends ShopStates {}
+
 class ProductsLoadingState extends ShopStates {}
 
 class ProductsSuccessState extends ShopStates {}

@@ -1,5 +1,6 @@
 import 'package:cvscreen/modules/categories/category_screen.dart';
 import 'package:cvscreen/modules/products/products_screen.dart';
+import 'package:cvscreen/shared/components/components.dart';
 import 'package:cvscreen/shared/cubit/shop_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,14 @@ class HomeScreen extends StatelessWidget {
               'Shop',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  signOut(context);
+                },
+                icon: const Icon(Icons.logout),
+              ),
+            ],
             automaticallyImplyLeading: false,
           ),
           body: Column(

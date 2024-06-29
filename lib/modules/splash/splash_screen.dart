@@ -1,5 +1,8 @@
 import 'package:cvscreen/layouts/home_screen.dart';
+import 'package:cvscreen/modules/auth/login_screen.dart';
 import 'package:cvscreen/modules/splash/sliding_text.dart';
+import 'package:cvscreen/shared/components/components.dart';
+import 'package:cvscreen/shared/network/local/cache_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -18,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     initSlidingAnimation();
-    navigateToHome();
+    navigateToScreen();
   }
 
   @override
@@ -44,14 +47,15 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 
-  void navigateToHome() {
+  void navigateToScreen() {
+    var token = CacheHelper.sharedPreferences?.getString("token");
+    print(token);
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
-        ),
-      );
+      if (token == null || token == 'null') {
+        navigateTo(context, const LoginScreen());
+      } else {
+        navigateTo(context, const HomeScreen());
+      }
     });
   }
 

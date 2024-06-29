@@ -1,13 +1,18 @@
+import 'package:cvscreen/modules/auth/cubit/auth_cubit.dart';
 import 'package:cvscreen/modules/splash/splash_screen.dart';
 import 'package:cvscreen/shared/cubit/shop_cubit.dart';
-import 'package:cvscreen/shared/network/dio_helper.dart';
-import 'package:device_preview/device_preview.dart';
+import 'package:cvscreen/shared/network/local/cache_helper.dart';
+import 'package:cvscreen/shared/network/remote/dio_helper.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
-  runApp(DevicePreview(enabled: true, builder: (context) => const MyApp()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await CacheHelper.init();
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,12 +21,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ShopCubit(DioHelper(Dio()))..fetchProducts(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ShopCubit(DioHelper(Dio()))..fetchProducts(),
+        ),
+        BlocProvider(
+          create: (context) => AuthCubit(DioHelper(Dio())),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

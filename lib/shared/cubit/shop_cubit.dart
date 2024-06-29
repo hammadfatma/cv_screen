@@ -1,5 +1,5 @@
 import 'package:cvscreen/models/product_model.dart';
-import 'package:cvscreen/shared/network/dio_helper.dart';
+import 'package:cvscreen/shared/network/remote/dio_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -50,5 +50,6 @@ class ShopCubit extends Cubit<ShopStates> {
     } else {
       fetchProductsByCategory(categoryName);
     }
+    emit(ShopChangeCategoriesState());
   }
 }
