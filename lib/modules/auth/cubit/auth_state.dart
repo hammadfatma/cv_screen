@@ -13,6 +13,14 @@ class AuthSuccessLoginState extends AuthStates {}
 
 class AuthFailureLoginState extends AuthStates {}
 
+class AuthUnauthorizedLoginState extends AuthStates {}
+
+class AuthErrorLoginState extends AuthStates {
+  final String errorMessage;
+
+  AuthErrorLoginState(this.errorMessage);
+}
+
 class AuthLoadingRegisterState extends AuthStates {}
 
 class AuthSuccessRegisterState extends AuthStates {}

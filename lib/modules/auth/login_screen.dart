@@ -3,7 +3,6 @@ import 'package:cvscreen/layouts/home_screen.dart';
 import 'package:cvscreen/modules/auth/cubit/auth_cubit.dart';
 import 'package:cvscreen/modules/auth/register_screen.dart';
 import 'package:cvscreen/shared/components/components.dart';
-import 'package:cvscreen/shared/network/local/cache_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +16,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   var formKey = GlobalKey<FormState>();
 
-  var emailController = TextEditingController();
+  var nameController = TextEditingController();
 
   var passwordController = TextEditingController();
   @override
@@ -28,9 +27,10 @@ class _LoginScreenState extends State<LoginScreen> {
           showToast(text: 'Successfuly, logined', state: ToastStates.success);
           navigateTo(context, const HomeScreen());
         }
-        if (state is AuthFailureLoginState) {
+        if (state is AuthFailureLoginState ||
+            state is AuthUnauthorizedLoginState) {
           showToast(
-              text: 'Failed, please create account', state: ToastStates.error);
+              text: 'Failed, unauthorized user', state: ToastStates.error);
         }
       },
       builder: (context, state) {
@@ -66,16 +66,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 30.0,
                       ),
                       defaultFormField(
-                        controller: emailController,
-                        type: TextInputType.emailAddress,
+                        controller: nameController,
+                        type: TextInputType.name,
                         validate: (value) {
                           if (value!.isEmpty) {
-                            return 'please enter your email address';
+                            return 'please enter your user name';
                           }
                           return null;
                         },
-                        label: 'Email Address',
-                        prefix: Icons.email_outlined,
+                        label: 'User Name',
+                        prefix: Icons.person,
                       ),
                       const SizedBox(
                         height: 15.0,
@@ -106,15 +106,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           return defaultButton(
                             function: () {
                               if (formKey.currentState!.validate()) {
-                                print(CacheHelper.sharedPreferences
-                                    ?.getString("token"));
                                 authCubit.loginForUser(
-                                  emailController.text,
+                                  nameController.text,
                                   passwordController.text,
-                                  CacheHelper.sharedPreferences
-                                          ?.getString("token") ??
-                                      'null',
-                                  context,
                                 );
                               }
                             },

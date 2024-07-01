@@ -1,6 +1,5 @@
 import 'package:cvscreen/modules/auth/cubit/auth_cubit.dart';
 import 'package:cvscreen/modules/splash/splash_screen.dart';
-import 'package:cvscreen/shared/cubit/shop_cubit.dart';
 import 'package:cvscreen/shared/network/local/cache_helper.dart';
 import 'package:cvscreen/shared/network/remote/dio_helper.dart';
 import 'package:dio/dio.dart';
@@ -23,9 +22,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => ShopCubit(DioHelper(Dio()))..fetchProducts(),
-        ),
         BlocProvider(
           create: (context) => AuthCubit(DioHelper(Dio())),
         ),

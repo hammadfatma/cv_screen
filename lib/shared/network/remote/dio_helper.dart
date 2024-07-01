@@ -15,6 +15,16 @@ class DioHelper {
     return response.data;
   }
 
+  Future<List<dynamic>> getUsers() async {
+    var response = await _dio.get('$_baseUrl/users');
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> getUserById(int? userId) async {
+    var response = await _dio.get('$_baseUrl/users/$userId');
+    return response.data;
+  }
+
   Future<Map<String, dynamic>> addUser(User userModel) async {
     var response = await _dio.post(
       '$_baseUrl/users',
@@ -33,8 +43,24 @@ class DioHelper {
     return response.data;
   }
 
-  Future<Map<String, dynamic>> getUser(String userId) async {
-    var response = await _dio.get('$_baseUrl/users/$userId');
-    return response.data;
+  Future<Map<String, dynamic>?> loginUser(
+      String userName, String password) async {
+    var response = await _dio.post(
+      '$_baseUrl/auth/login',
+      data: {
+        'username': userName,
+        'password': password,
+      },
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
   }
 }

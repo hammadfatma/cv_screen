@@ -18,3 +18,15 @@ class ProductsByCategoryLoadingState extends ShopStates {}
 class ProductsByCategorySuccessState extends ShopStates {}
 
 class ProductsByCategoryFailureState extends ShopStates {}
+
+class UsersLoadingState extends ShopStates {}
+
+class UsersSuccessState extends ShopStates {}
+
+class UsersFailureState extends ShopStates {}
+
+class UserByIdLoadingState extends ShopStates {}
+
+class UserByIdSuccessState extends ShopStates {}
+
+class UserByIdFailureState extends ShopStates {}

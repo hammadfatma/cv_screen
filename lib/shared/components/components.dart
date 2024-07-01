@@ -1,4 +1,4 @@
-import 'package:cvscreen/modules/auth/login_screen.dart';
+import 'package:cvscreen/modules/splash/splash_screen.dart';
 import 'package:cvscreen/shared/network/local/cache_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -131,10 +131,14 @@ Color chooseToastColor(ToastStates state) {
   return color;
 }
 
-void signOut(context) {
-  CacheHelper.sharedPreferences?.remove('token').then((value) {
+void signOut(context) async {
+  await CacheHelper.sharedPreferences?.remove('userName').then((value) {
     if (value) {
-      navigateAndFinish(context, const LoginScreen());
+      CacheHelper.sharedPreferences?.clear().then((value) {
+        if (value) {
+          navigateAndFinish(context, const SplashScreen());
+        }
+      });
     }
   });
 }

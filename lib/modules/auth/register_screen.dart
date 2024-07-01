@@ -1,5 +1,4 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:cvscreen/layouts/home_screen.dart';
 import 'package:cvscreen/models/user/user.dart';
 import 'package:cvscreen/modules/auth/cubit/auth_cubit.dart';
 import 'package:cvscreen/shared/components/components.dart';
@@ -26,8 +25,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       listener: (context, state) {
         if (state is AuthSuccessRegisterState) {
           showToast(
-              text: 'Successfuly, Account created', state: ToastStates.success);
-          navigateTo(context, const HomeScreen());
+              text: 'Successfuly, please go to login screen',
+              state: ToastStates.success);
         }
         if (state is AuthFailureLoginState) {
           showToast(text: 'Failed, please try again', state: ToastStates.error);
