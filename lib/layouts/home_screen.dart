@@ -1,3 +1,4 @@
+import 'package:cvscreen/modules/carts/cart_screen.dart';
 import 'package:cvscreen/modules/categories/category_screen.dart';
 import 'package:cvscreen/modules/products/products_screen.dart';
 import 'package:cvscreen/modules/profiles/profile_screen.dart';
@@ -30,7 +31,14 @@ class HomeScreen extends StatelessWidget {
               ),
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    navigateTo(
+                      context,
+                      CartScreen(
+                        collectedProducts: cubit.productsInCart,
+                      ),
+                    );
+                  },
                   icon: const Icon(Icons.shopping_cart_outlined),
                 ),
                 IconButton(

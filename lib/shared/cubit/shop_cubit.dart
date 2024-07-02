@@ -1,3 +1,5 @@
+import 'package:cvscreen/models/cart/cart.dart';
+import 'package:cvscreen/models/cart/product.dart';
 import 'package:cvscreen/models/product_model.dart';
 import 'package:cvscreen/models/user/user.dart';
 import 'package:cvscreen/shared/network/local/cache_helper.dart';
@@ -61,13 +63,14 @@ class ShopCubit extends Cubit<ShopStates> {
   var userName = CacheHelper.sharedPreferences?.getString("userName");
   Future<void> fetchUsers() async {
     emit(UsersLoadingState());
-    await dioHelper.getUsers().then((value) {
+    await dioHelper.getUsers().then((value) async {
       var data = value.map((element) => User.fromJson(element)).toList();
       users = data;
       for (var element in data) {
         element.username == userName ? userId = element.id! : null;
         if (element.id == userId) {
           userItem = element;
+          await fetchCartsByUserId(userId);
         }
       }
       emit(UsersSuccessState());
@@ -76,12 +79,31 @@ class ShopCubit extends Cubit<ShopStates> {
     });
   }
 
-  Future<void> fetchUserById(int? userId) async {
-    emit(UserByIdLoadingState());
-    await dioHelper.getUserById(userId).then((value) {
-      emit(UserByIdSuccessState());
+  List<Product> allProductsInCart = [];
+  List<Map<String, dynamic>> matchingProducts = [];
+  List<ProductModel> productsInCart = [];
+  Future<void> fetchCartsByUserId(int? userId) async {
+    emit(CartsByUserIdLoadingState());
+    await dioHelper.getCartsByUserId(userId).then((value) async {
+      var data = value.map((element) => Cart.fromJson(element)).toList();
+      for (var element in data) {
+        element.products != null && element.products is List<Product>
+            ? allProductsInCart.addAll(List<Product>.from(element.products!))
+            : [];
+      }
+      for (var productInCart in allProductsInCart) {
+        final product = products.firstWhere(
+          (element) => element.id == productInCart.productId,
+        );
+        product.quantity = productInCart.quantity;
+        matchingProducts.add(product.toJson());
+      }
+      productsInCart = matchingProducts
+          .map((element) => ProductModel.fromJson(element))
+          .toList();
+      emit(CartsByUserIdSuccessState());
     }).catchError((error) {
-      emit(UserByIdFailureState());
+      emit(CartsByUserIdFailureState());
     });
   }
 }

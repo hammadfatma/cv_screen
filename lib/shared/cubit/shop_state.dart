@@ -25,8 +25,8 @@ class UsersSuccessState extends ShopStates {}
 
 class UsersFailureState extends ShopStates {}
 
-class UserByIdLoadingState extends ShopStates {}
+class CartsByUserIdLoadingState extends ShopStates {}
 
-class UserByIdSuccessState extends ShopStates {}
+class CartsByUserIdSuccessState extends ShopStates {}
 
-class UserByIdFailureState extends ShopStates {}
+class CartsByUserIdFailureState extends ShopStates {}

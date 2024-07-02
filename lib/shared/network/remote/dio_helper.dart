@@ -20,8 +20,8 @@ class DioHelper {
     return response.data;
   }
 
-  Future<Map<String, dynamic>> getUserById(int? userId) async {
-    var response = await _dio.get('$_baseUrl/users/$userId');
+  Future<List<dynamic>> getCartsByUserId(int? userId) async {
+    var response = await _dio.get('$_baseUrl/carts/user/$userId');
     return response.data;
   }
 
