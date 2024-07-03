@@ -82,6 +82,8 @@ class ShopCubit extends Cubit<ShopStates> {
   List<Product> allProductsInCart = [];
   List<Map<String, dynamic>> matchingProducts = [];
   List<ProductModel> productsInCart = [];
+  Map<int, int> productMap = {};
+  double totalPrice = 0;
   Future<void> fetchCartsByUserId(int? userId) async {
     emit(CartsByUserIdLoadingState());
     await dioHelper.getCartsByUserId(userId).then((value) async {
@@ -92,12 +94,22 @@ class ShopCubit extends Cubit<ShopStates> {
             : [];
       }
       for (var productInCart in allProductsInCart) {
-        final product = products.firstWhere(
-          (element) => element.id == productInCart.productId,
-        );
-        product.quantity = productInCart.quantity;
-        matchingProducts.add(product.toJson());
+        int productId = productInCart.productId!;
+        int productQuantity = productInCart.quantity ?? 0;
+        if (productMap.containsKey(productId)) {
+          productMap[productId] = productMap[productId]! + productQuantity;
+        } else {
+          productMap[productId] = productQuantity;
+        }
       }
+      productMap.forEach((productId, productQuantity) {
+        final product = products.firstWhere(
+          (element) => element.id == productId,
+        );
+        product.quantity = productQuantity;
+        totalPrice += ((product.quantity ?? 0) * (product.price)).round();
+        matchingProducts.add(product.toJson());
+      });
       productsInCart = matchingProducts
           .map((element) => ProductModel.fromJson(element))
           .toList();

@@ -51,9 +51,9 @@ class _SplashScreenState extends State<SplashScreen>
     var userName = CacheHelper.sharedPreferences?.getString("userName");
     Future.delayed(const Duration(seconds: 2), () {
       if (userName == null || userName == 'null') {
-        navigateTo(context, const LoginScreen());
+        navigateAndFinish(context, const LoginScreen());
       } else {
-        navigateTo(context, const HomeScreen());
+        navigateAndFinish(context, const HomeScreen());
       }
     });
   }

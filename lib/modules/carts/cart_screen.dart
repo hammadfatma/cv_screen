@@ -1,14 +1,19 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:cvscreen/models/product_model.dart';
+import 'package:cvscreen/modules/orders/order_placed.dart';
 import 'package:cvscreen/shared/components/components.dart';
+import 'package:cvscreen/shared/cubit/shop_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({
     super.key,
     required this.collectedProducts,
+    required this.cubitContext,
   });
   final List<ProductModel> collectedProducts;
+  final BuildContext cubitContext;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,12 +34,77 @@ class CartScreen extends StatelessWidget {
               condition: collectedProducts.isNotEmpty,
               builder: (context) {
                 return Expanded(
-                  child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      return builCartItem(context, collectedProducts[index]);
-                    },
-                    separatorBuilder: (context, index) => myDivider(),
-                    itemCount: collectedProducts.length,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView.separated(
+                          itemBuilder: (context, index) {
+                            return builCartItem(
+                                context, collectedProducts[index]);
+                          },
+                          separatorBuilder: (context, index) => myDivider(),
+                          itemCount: collectedProducts.length,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              r'Total: $'
+                              '${BlocProvider.of<ShopCubit>(cubitContext).totalPrice}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(128, 44, 110, 1),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text(
+                                        'We will send your order to the address on the profile page, are you sure?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          navigateAndFinish(
+                                            context,
+                                            const OrderPlacedScreen(),
+                                          );
+                                        },
+                                        child: const Text('Yes'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('No'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: const Color.fromRGBO(128, 44, 110, 1),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Text(
+                                  'PLACE ORDER',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 );
               },

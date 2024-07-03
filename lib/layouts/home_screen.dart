@@ -36,6 +36,7 @@ class HomeScreen extends StatelessWidget {
                       context,
                       CartScreen(
                         collectedProducts: cubit.productsInCart,
+                        cubitContext: context,
                       ),
                     );
                   },
